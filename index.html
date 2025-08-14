@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Infos de l'appareil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 2rem;
+        }
+        pre {
+            background: #222;
+            color: #0f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖥️ Informations de votre appareil</h1>
+    <pre id="output">Chargement...</pre>
+
+    <script>
+        const output = document.getElementById("output");
+
+        // Crée un objet avec les infos de l'appareil
+        const info = {
+            navigateur: navigator.userAgent,
+            langue: navigator.language,
+            plateforme: navigator.platform,
+            cookiesActivés: navigator.cookieEnabled,
+            résolutionsÉcran: `${screen.width} x ${screen.height}`,
+            fuseauHoraire: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        };
+
+        // Récupère l'adresse IP via une API externe
+        fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(data => {
+                info.adresseIP = data.ip;
+                afficherInfos();
+            })
+            .catch(() => {
+                info.adresseIP = "Non disponible";
+                afficherInfos();
+            });
+
+        // Affiche les infos dans la page
+        function afficherInfos() {
+            output.textContent = JSON.stringify(info, null, 2);
+        }
+    </script>
+</body>
+</html>
